@@ -48,10 +48,15 @@ def user_post(username):
     user_id = get_user_id(username)
     response = requests.get('%susers/%s/media/recent/?access_token=%s' % (BASE_URL,user_id, APP_ACCESS_TOKEN)).json()
     if response['meta']['code'] == 200:
+        pprint(response)
         url = response['data'][0]['images']['standard_resolution']['url']
         name = response['data'][0]['id'] + '.jpg'
         urllib.urlretrieve(url, name)
-        print "Download complete"
+        print "Image Download complete"
+        url=response['data'][0]['videos']['standard_resolution']['url']
+        name=response['data'][0]['id'] + '.mp4'
+        urllib.urlretrieve(url,name)
+        print"Video Download complete"
     else:
         print "Code other than 200 received "
 
