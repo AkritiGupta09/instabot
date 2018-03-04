@@ -60,11 +60,42 @@ def user_post(username):
     else:
         print "Code other than 200 received "
 
+def get_media_id(uname):
+    user_id = get_user_id(uname)
+    response = requests.get('%susers/%s/media/recent/?access_token=%s' % (BASE_URL, user_id, APP_ACCESS_TOKEN)).json()
+    if response['meta']['code'] == 200:
+        return response['data'][0]['id']
+    else:
+        print "Code other than 200 received "
+
+
+def like_post(uname):
+    media_id=get_media_id(uname)
+    payload={"access_token":APP_ACCESS_TOKEN}
+    url=BASE_URL+'media/%s/likes' %(media_id)
+    response=requests.post(url,payload).json()
+    if response['meta']['code']==200:
+        print"Your like is done"
+    else:
+        print("Your like can not done")
+
+def comment_post(uname):
+    media_id=get_media_id(uname)
+    comment=raw_input("What do you want to comment ?")
+    payload = {"access_token": APP_ACCESS_TOKEN, "text":comment}
+    url=BASE_URL+'media/%s/comments' %(media_id)
+    response=requests.post(url,payload).json()
+    if response['meta']['code']==200:
+        print "comment done"
+    else:
+        print("comment cnt be done")
+
+
 
 def start_bot():
     show_menu=True
     while show_menu:
-        menu_choice=input("What do you want to do? 1.Get owner info\n 2.Get owner post\n 3.Get user info\n 4.Get user post\n 0.Exit\n")
+        menu_choice=input("What do you want to do? 1.Get owner info\n 2.Get owner post\n 3.Get user info\n 4.Get user post\n 5.Like a post\n 6.Comment on a post\n 0.Exit\n")
         if menu_choice==1:
             owner_info()
         elif menu_choice==2:
@@ -75,6 +106,12 @@ def start_bot():
         elif menu_choice==4:
             username = raw_input("Write the name of user from whom you want to fetch data:")
             user_post(username)
+        elif menu_choice==5:
+            username = raw_input("Write the name of user from whom you want to fetch data:")
+            like_post(username)
+        elif menu_choice==6:
+            username = raw_input("Write the name of user from whom you want to fetch data:")
+            comment_post(username)
         elif menu_choice==0:
             show_menu=False
         else:
