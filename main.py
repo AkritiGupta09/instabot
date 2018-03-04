@@ -2,6 +2,7 @@
 import requests
 import urllib
 from pprint import pprint
+#Importing sentiment analyzer
 from textblob import TextBlob
 from textblob.sentiments import NaiveBayesAnalyzer
 
@@ -157,3 +158,4 @@ def start_bot():
             print "Invalid Choice "
 
 start_bot()
+#calling the func
